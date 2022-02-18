@@ -3,7 +3,7 @@
 
 # create a pure python array (list of lists)
 
-# update world function
+#    update world function
 
 grid = []
 

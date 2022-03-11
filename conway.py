@@ -2,11 +2,7 @@
 # import matplotlib.pyplot as plt
 
 # create a pure python array (list of lists)
-
 #    update world function
-
-height = 9
-width = 9
 
 class Grid:
     """The grid object where the Game of Life occurs"""
@@ -17,17 +13,31 @@ class Grid:
         for i in range(height):
             self.state.append(["o"]*width)
 
+    def check_loc(self, h, w):
+        if (h >= 0) and (h <= self.h-1) and (w >= 0) and (w <= self.w-1):
+            return self[h][w]
+        else:
+            return "x"
+
     def get_neighbors(self, loc_h, loc_w):
-        left = max(0, (loc_w - 1))
-        right = min(len(self.state[0]), (loc_w + 2))
-        top = max(0, (loc_h - 1))
-        bottom = min(len(self.state), (loc_h + 2))
         stars = 0
-        for i in self.state[top:bottom]:
-            row_part = i[left:right]
-            stars += row_part.count('*')
-            #print(row_part)
-            #print('---'*10)
+        # check at all 8 surrounding locations
+        if self.check_loc(loc_h-1, loc_w-1) == "*":
+            stars += 1
+        if self.check_loc(loc_h-1, loc_w) == "*":
+            stars += 1
+        if self.check_loc(loc_h-1, loc_w+1) == "*":
+            stars += 1
+        if self.check_loc(loc_h, loc_w-1) == "*":
+            stars += 1
+        if self.check_loc(loc_h, loc_w+1) == "*":
+            stars += 1
+        if self.check_loc(loc_h+1, loc_w-1) == "*":
+            stars += 1
+        if self.check_loc(loc_h+1, loc_w) == "*":
+            stars += 1
+        if self.check_loc(loc_h+1, loc_w+1) == "*":
+            stars += 1
         return stars
 
     def add_glider(self, loc_h, loc_w):
@@ -56,15 +66,17 @@ class Grid:
             print(h)
         print('-'*20)
 
+height = 9
+width = 9
 my_grid = Grid(height, width)
 my_grid.add_glider(4,5)
 my_grid.show_grid()
-print("neighbors for [0, 0]: " + str(my_grid.get_neighbors(0, 0)))
-print("neighbors for [0, 1]: " + str(my_grid.get_neighbors(0, 1)))
+#print("neighbors for [0, 0]: " + str(my_grid.get_neighbors(0, 0)))
+#print("neighbors for [0, 1]: " + str(my_grid.get_neighbors(0, 1)))
 
 for i in range(5):
-    my_grid.iter_world()
-    my_grid.show_grid()
+   my_grid.iter_world()
+   my_grid.show_grid()
 
 # could use a web front end, turn this into an API
 # function that updates matrix could be an API

@@ -4,6 +4,8 @@
 # create a pure python array (list of lists)
 #    update world function
 
+import copy
+
 class Grid:
     """The grid object where the Game of Life occurs"""
     def __init__(self, height, width):
@@ -12,10 +14,11 @@ class Grid:
         self.state = []
         for i in range(height):
             self.state.append(["o"]*width)
+        self.new_state = copy.deepcopy(self.state)
 
     def check_loc(self, h, w):
-        if (h >= 0) and (h <= self.h-1) and (w >= 0) and (w <= self.w-1):
-            return self[h][w]
+        if (h >= 0) and (h < self.h) and (w >= 0) and (w < self.w):
+            return self.state[h][w]
         else:
             return "x"
 
@@ -55,11 +58,15 @@ class Grid:
         for h in range(self.h):
             for w in range(self.w):
                 neighbors = self.get_neighbors(h, w)
-                if self.state[h][w] == "o":
-                    if neighbors == 3:
-                        self.state[h][w] = "*"
-                elif neighbors not in [2, 3]:
-                    self.state[h][w] = "o"
+                if self.state[h][w] == "*" and neighbors < 2:
+                    self.new_state[h][w] = "o"
+                elif self.state[h][w] == "*" and neighbors > 3:
+                    self.new_state[h][w] = "o"
+                elif self.state[h][w] == "*" and (neighbors == 2 or neighbors == 3):
+                    self.new_state[h][w] = "*"
+                elif self.state[h][w] == "o" and neighbors == 3:
+                    self.new_state[h][w] = "*"
+        self.state = copy.deepcopy(self.new_state)
 
     def show_grid(self):
         for h in self.state:
@@ -71,8 +78,8 @@ width = 9
 my_grid = Grid(height, width)
 my_grid.add_glider(4,5)
 my_grid.show_grid()
-#print("neighbors for [0, 0]: " + str(my_grid.get_neighbors(0, 0)))
-#print("neighbors for [0, 1]: " + str(my_grid.get_neighbors(0, 1)))
+#print("neighbors for [3, 4]: " + str(my_grid.get_neighbors(3, 4)))
+print("neighbors for [4, 4]: " + str(my_grid.get_neighbors(4, 4)))
 
 for i in range(5):
    my_grid.iter_world()

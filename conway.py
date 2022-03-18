@@ -14,7 +14,6 @@ class Grid:
         self.state = []
         for i in range(height):
             self.state.append(["o"]*width)
-        self.new_state = copy.deepcopy(self.state)
 
     def check_loc(self, h, w):
         if (h >= 0) and (h < self.h) and (w >= 0) and (w < self.w):
@@ -55,18 +54,23 @@ class Grid:
 
     # simulate world
     def iter_world(self):
+        add_star = []
+        kill_star = []
         for h in range(self.h):
             for w in range(self.w):
                 neighbors = self.get_neighbors(h, w)
                 if self.state[h][w] == "*" and neighbors < 2:
-                    self.new_state[h][w] = "o"
+                    kill_star.append([h, w])
                 elif self.state[h][w] == "*" and neighbors > 3:
-                    self.new_state[h][w] = "o"
+                    kill_star.append([h, w])
                 elif self.state[h][w] == "*" and (neighbors == 2 or neighbors == 3):
-                    self.new_state[h][w] = "*"
+                    add_star.append([h, w])
                 elif self.state[h][w] == "o" and neighbors == 3:
-                    self.new_state[h][w] = "*"
-        self.state = copy.deepcopy(self.new_state)
+                    add_star.append([h, w])
+        for a in add_star:
+            self.state[a[0]][a[1]] == "*"
+        for k in kill_star:
+            self.state[k[0]][k[1]] == "o"
 
     def show_grid(self):
         for h in self.state:

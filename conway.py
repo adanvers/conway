@@ -68,9 +68,9 @@ class Grid:
                 elif self.state[h][w] == "o" and neighbors == 3:
                     add_star.append([h, w])
         for a in add_star:
-            self.state[a[0]][a[1]] == "*"
+            self.state[a[0]][a[1]] = "*"
         for k in kill_star:
-            self.state[k[0]][k[1]] == "o"
+            self.state[k[0]][k[1]] = "o"
 
     def show_grid(self):
         for h in self.state:
